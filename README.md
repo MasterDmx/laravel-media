@@ -37,3 +37,9 @@ php artisan migrate
     'visibility' => 'public',
 ],
 ```
+
+7. Подключение фронта
+```js
+import VueLaravelMediaManager from './vendor/media-manager/plugin.js';
+Vue.use(VueLaravelMediaManager)
+```
