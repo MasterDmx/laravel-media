@@ -1,0 +1,20 @@
+{
+    "name": "masterdmx/laravel-media",
+    "description": "Media plugin for laravel",
+    "type": "project",
+    "license": "MIT",
+    "minimum-stability": "dev",
+    "authors": [
+        {
+            "name": "Sergey Krening",
+            "email": "masterdmx3325@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MasterDmx\\LaravelMedia\\": "src/"
+        }
+    },
+    "version": "1.0.0",
+    "require": {}
+}

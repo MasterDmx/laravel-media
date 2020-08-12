@@ -1,0 +1,37 @@
+&-search-bar {
+    white-space: nowrap;
+    position: relative;
+
+    &__icon {
+        position: absolute;
+        top: 0;
+        left: 0;
+        padding: 11px 15px 0 15px;
+        @include svg-icon-color ()
+    }
+
+    &__field {
+        background: transparent;
+        border-radius: 8px;
+        outline: 0;
+        padding: 10px 20px 10px 43px;
+        font-weight: 400;
+        font-size: 14px;
+        min-width: 175px;
+        transition: 0.15s all ease;
+        border: 1px solid transparent;
+        color: #fff;
+        background: #1e2024;
+        width: 100%;
+        box-sizing: border-box;
+
+        // &:focus {
+        //     background: #fff;
+        //     color: #000;
+        // }
+    }
+
+    &__field:focus + &__icon, &__field:hover + &__icon {
+        @include svg-icon-color ($theme);
+    }
+}

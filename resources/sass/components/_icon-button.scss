@@ -1,0 +1,33 @@
+&-icon-button {
+    height: 42px;
+    width: 42px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    text-align: center;
+    cursor: pointer;
+    white-space: nowrap;
+    outline: none;
+    border: none;
+    transition: 150ms all ease;
+    background: transparent;
+
+    &:disabled {
+        opacity: .4;
+        pointer-events:none;
+    }
+
+    &:hover {
+        background: #1e2024;
+    }
+
+    &--svg {
+        @include svg-icon-color();
+
+        &:hover {
+            @include svg-icon-color($theme);
+        }
+    }
+}

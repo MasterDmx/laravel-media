@@ -1,0 +1,51 @@
+&-detailed {
+    flex: 0 0 300px;
+    padding-left: 20px;
+    overflow: auto;
+
+    &__wrapp {
+        padding-bottom: 20px;
+        // height: 100%;
+    }
+
+    &__preview {
+        width: 100%;
+        display: block;
+        margin-bottom: 7px;
+
+        img {
+            border-radius: 4px;
+            overflow: hidden;
+            width: 100%;
+            -o-object-fit: cover;
+            object-fit: cover;
+        }
+    }
+
+    &__info {
+        padding-top: 20px;
+    }
+
+    &-empty {
+        text-align: center;
+        display: flex;
+        align-items: center;
+        height: 100%;
+
+        &__wrapp {
+            margin: 0 auto;
+        }
+
+        p {
+            margin-top: 10px;
+            max-width: 130px;
+            font-size: 14px;
+            font-weight: 300;
+            color: #7d858c;
+        }
+
+        svg {
+
+        }
+    }
+}

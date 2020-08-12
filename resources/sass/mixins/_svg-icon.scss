@@ -1,0 +1,8 @@
+@mixin svg-icon-color ($color: $text) {
+    svg {
+        path, line, polyline, rect, circle {
+            transition: 150ms all ease;
+            stroke: $color;
+        }
+    }
+}

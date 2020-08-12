@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito:ital,wght@0,200;0,300;0,400;0,600;0,700;0,800;0,900;1,200;1,300;1,400;1,600;1,700;1,800;1,900&display=swap');
+@import 'variables';
+
+@import 'mixins/svg-icon';
+@import 'mixins/hover-transition';
+
+
+.mm {
+    color: $text;
+
+    * {
+        font-family: 'Nunito', sans-serif !important;
+    }
+
+    // Components
+    @import 'components/icon-button';
+    @import 'components/check';
+    @import 'components/button';
+    @import 'components/loader';
+
+    // Overrides
+    @import 'overrides/vm-modal';
+
+    // Elements
+    @import 'elements/ui';
+    @import 'elements/sidebar';
+    @import 'elements/sidemenu';
+    @import 'elements/sideblock';
+    @import 'elements/workspace';
+    @import 'elements/search-bar';
+    @import 'elements/toolbar';
+    @import 'elements/card';
+    @import 'elements/content';
+    @import 'elements/detailed';
+    @import 'elements/info';
+    @import 'elements/preview';
+    @import 'elements/files';
+    @import 'elements/text-informer';
+
+    // Animation
+    @import 'animation/fade';
+
+    .radio {
+        & > input[type=radio]:checked ~ .radio__label:after,
+        & > input[type=radio]:checked ~ .radio__label:before {
+            border-color: #00bc7e;
+        }
+        & > input[type=radio]:checked ~ .radio__label {
+            color: #bec6cf;
+        }
+        .radio__label {
+            font-size: 13px;
+        }
+        .radio__label:before {
+            background-color: #363636;
+        }
+    }
+}
+

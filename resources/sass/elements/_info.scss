@@ -1,0 +1,51 @@
+&-info {
+    margin-top: 18px;
+    margin-bottom: 18px;
+
+    &-list {
+        margin-top: -18px;
+        margin-bottom: -18px;
+    }
+
+    &__title {
+        display: block;
+        font-size: 14px;
+        color: #00BC7E;
+        margin-bottom: 2px;
+    }
+
+    &__content {
+        display: inline-block;
+        font-size: 13px;
+        color: #bec6cf;
+        font-weight: 300;
+    }
+
+    &__categories {
+        padding-top: 7px;
+    }
+
+    &__check + &__check {
+        margin-top: 12px;
+    }
+
+    &__field {
+        border: 0;
+        background: none;
+        color: #bec6cf;
+        margin-left: -2px;
+        font-size: 13px;
+        width: 100%;
+        border-bottom: 1px transparent;
+
+        option {
+            background-color: #000;
+        }
+
+        &:focus {
+            color: #fff;
+            border-bottom: 1px dashed #fff3;
+        }
+    }
+
+}

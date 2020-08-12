@@ -1,0 +1,66 @@
+&-toolbar {
+    padding-top: 15px;
+    padding-bottom: 15px;
+
+    &__wrapp {
+        display: flex;
+    }
+
+    &__title {
+        flex-grow: 1;
+        align-self: center;
+        white-space: nowrap;
+        position: relative;
+        padding-left: 17px;
+        color: $text-muted;
+        font-size: 14px;
+
+        span {
+            display: inline-block;
+            font-size: 11px;
+            margin: 0 8px 0 11px;
+            padding-bottom: 3px;
+            line-height: 5px;
+            overflow: hidden;
+        }
+
+        font {
+            color: $text;
+        }
+    }
+
+    &__searchbox {
+        flex-grow: 1;
+        align-self: center;
+        white-space: nowrap;
+        position: relative;
+        padding-left: 17px;
+        color: #7d858c;
+        width: 100%;
+        padding: 0 15px 0 40px;
+    }
+
+    &__tools {
+        flex-grow: 1;
+        align-self: center;
+        white-space: nowrap;
+        text-align: right;
+    }
+
+    &__tool {
+        margin-left: 5px;
+
+        &:first-child {
+            margin-left: 0;
+        }
+    }
+
+    &__group {
+        display: inline-block;
+        vertical-align: middle;
+
+        & + & {
+            margin-left: 28px;
+        }
+    }
+}

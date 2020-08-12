@@ -1,0 +1,92 @@
+&-sidemenu {
+    &-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 15px 12px 25px;
+        text-decoration: none;
+        cursor: pointer;
+        position: relative;
+        white-space: nowrap;
+        width: 100%;
+        border: 0;
+        background: none;
+        @include hover-transition();
+
+        &__icon {
+            margin-right: 12px;
+            line-height: 0;
+            color: $text;
+            @include svg-icon-color();
+        }
+
+        &__label {
+            font-size: 13px;
+            font-weight: 700;
+            vertical-align: middle;
+            white-space: nowrap;
+            max-width: 210px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            color: $text;
+            padding-top: 2px;
+            width: 100%;
+            text-align: left;
+        }
+
+        &__count {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            padding-top: 2px;
+            width: 100%;
+            text-align: right;
+            font-size: 11px;
+            color: #ffffff36;
+        }
+
+        &.is-active &__icon {
+            @include svg-icon-color($theme);
+        }
+
+        &:focus {
+            outline: none !important;
+        }
+
+        &:hover {
+            background: rgba(0,188,126,.1);
+            @include hover-transition();
+        }
+
+        &:hover &__icon {
+            @include svg-icon-color($theme);
+            @include hover-transition();
+        }
+
+        &:hover &__label, &.is-active &__label {
+            color: $theme;
+            @include hover-transition();
+        }
+
+
+        &.is-renaming {
+            background: #fff;
+        }
+
+        &.is-renaming &__input {
+            width: 100%;
+            text-align: left;
+
+            input {
+                border: 0;
+                background: none;
+                outline: none;
+                width: 100%;
+                color: #000;
+                margin-left: -2px;
+                font-weight: 400;
+            }
+        }
+    }
+}

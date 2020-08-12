@@ -1,0 +1,3 @@
+@mixin hover-transition ($time: 150ms) {
+    transition: $time all ease;
+}
