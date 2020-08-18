@@ -1,10 +1,8 @@
-import PulseLoader from 'vue-spinner/src/PulseLoader.vue'
 import card from './components/card.vue'
 import preview from './components/preview.vue'
 
 export default {
     components: {
-        PulseLoader,
         card,
         preview
     },

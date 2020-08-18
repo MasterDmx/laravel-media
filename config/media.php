@@ -21,7 +21,7 @@ return [
      */
     'user_mode' => false,
 
-    'default_entity' => \MasterDmx\LaravelMediaManager\Entities\FileMedia::class,
+    'default_entity' => \MasterDmx\LaravelMedia\Entities\FileMedia::class,
 
     /**
      * Определения типов
@@ -30,7 +30,7 @@ return [
         'image' => [
             'driver' => 'image',
             'extensions' => ['png', 'jpeg', 'jpg', 'ico', 'gif', 'svg'],
-            'entity' => \MasterDmx\LaravelMediaManager\Entities\ImageMedia::class,
+            'entity' => \MasterDmx\LaravelMedia\Entities\ImageMedia::class,
         ],
 
         'document' => [
