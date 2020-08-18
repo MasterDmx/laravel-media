@@ -48,9 +48,15 @@ abstract class Media
      */
     public function export(): array
     {
-        return [
+        $data = [
             'path' => $this->path
         ];
+
+        if ($this->type !== 'file') {
+            $data['type'] = $this->type;
+        }
+
+        return $data;
     }
 
     public function getExportKey()

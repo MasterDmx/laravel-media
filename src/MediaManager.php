@@ -22,10 +22,14 @@ class MediaManager
         $list = [];
 
         foreach ($data as $key => $value) {
-            $keyPars = explode('/', $key);
-            $list[$keyPars[1]] = $this->typeEntities[$keyPars[0]]::import($value + [
-                'id' => $keyPars[1],
-                'type' => $keyPars[0]
+            if (is_string($value)) {
+                $value = ['path' => $value];
+            }
+
+            $type = !empty($value['type']) ? $value['type'] : 'file';
+            $list[$key] = $this->typeEntities[$type]::import($value + [
+                'id' => $key,
+                'type' => $type
             ]);
         }
 

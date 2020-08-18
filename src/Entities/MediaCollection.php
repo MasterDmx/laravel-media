@@ -18,7 +18,7 @@ class MediaCollection extends Collection
         $result = [];
 
         foreach ($this->items ?? [] as $key => $item) {
-            $result[$item->getExportKey()] = $item->export();
+            $result[$item->id] = $item->export();
         }
 
         return $result;
@@ -33,7 +33,7 @@ class MediaCollection extends Collection
      */
     public function get($key, $default = null)
     {
-        if ($this->offsetExists($key)) {
+        if ($this->has($key)) {
             return $this->items[$key];
         }
 
