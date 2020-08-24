@@ -76,4 +76,19 @@ abstract class Media
     {
         return json_encode($this->toArray());
     }
+
+    /**
+     * Показ
+     *
+     * @param string $template
+     * @return string
+     */
+    public function show(string $template): string
+    {
+        $template = str_replace('{id}', $this->id, $template);
+        $template = str_replace('{path}', $this->path, $template);
+        $template = str_replace('{url}', $this->getUrl(), $template);
+
+        return $template;
+    }
 }

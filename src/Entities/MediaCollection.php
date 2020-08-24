@@ -39,4 +39,20 @@ class MediaCollection extends Collection
 
         return value($default);
     }
+
+    /**
+     * Показ
+     *
+     * @param [type] $key
+     * @param [type] $template
+     * @param [type] $default
+     * @return void
+     */
+    public function show($key, $template, $default = '')
+    {
+        return $this->has($key) ? $this->items[$key]->show($template) : value($default);
+    }
+
+
+
 }

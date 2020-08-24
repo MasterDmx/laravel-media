@@ -30,4 +30,18 @@ class ImageMedia extends Media
             'title' => $this->title
         ];
     }
+
+    /**
+     * Показ
+     *
+     * @param string $template
+     * @return string
+     */
+    public function show(string $template): string
+    {
+        $template = parent::show($template);
+        $template = str_replace('{title}', $this->title, $template);
+
+        return $template;
+    }
 }
