@@ -8,9 +8,11 @@ class MediaCollection extends Collection
 {
     public function toArray(): array
     {
-        return $this->map(function ($elem) {
-            return $elem->toArray();
-        })->all();
+        // return $this->map(function ($elem) {
+        //     return $elem->toArray();
+        // })->all();
+
+        return $this->export();
     }
 
     public function export(): array

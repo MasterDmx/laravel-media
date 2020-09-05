@@ -13,6 +13,18 @@ use MasterDmx\LaravelMedia\MediaManager;
 class MediaCast implements CastsAttributes
 {
     /**
+     * Менеджер
+     *
+     * @var MediaManager
+     */
+    private $manager;
+
+    public function __construct()
+    {
+        $this->manager = app(MediaManager::class);
+    }
+
+    /**
      * Cast the given value.
      *
      * @param  \Illuminate\Database\Eloquent\Model  $model
@@ -23,7 +35,7 @@ class MediaCast implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        return app(MediaManager::class)->import(json_decode($value, true), get_class($model));
+        return $this->manager->import(json_decode($value, true), get_class($model));
     }
 
     /**
@@ -42,7 +54,7 @@ class MediaCast implements CastsAttributes
         }
 
         if (is_array($value)) {
-            return json_encode(app(MediaManager::class)->import($value)->export());
+            return json_encode($this->manager->import($value)->export());
         }
 
         throw new ErrorException('Undefined value type');
