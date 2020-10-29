@@ -2,145 +2,60 @@
 
 namespace MasterDmx\LaravelMedia\Services;
 
-use Illuminate\Http\UploadedFile;
+use ErrorException;
+use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
+use MasterDmx\LaravelMedia\Entities\File;
 
 class Uploader
 {
-    const DISK = 'media';
-
     /**
-     * Статус заливки
+     * Загрузка из урла
      *
-     * @var boolean
+     * @param string $url
      */
-    public $uploaded = false;
-
-    /**
-     * Файл
-     *
-     * @var UploadedFile
-     */
-    public $file;
-
-    /**
-     * Имя файла
-     *
-     * @var string
-     */
-    public $fileName;
-
-    /**
-     * Расширение файла
-     *
-     * @var string
-     */
-    public $fileExtension;
-
-    /**
-     * Каталоги
-     *
-     * @var array
-     */
-    public $catalogs;
-
-    /**
-     * Расширения для определения типов
-     *
-     * @var array
-     */
-    private $typeExtensions = [
-        'image' => [
-            'png',
-            'jpg',
-            'jpeg'
-        ],
-
-        'document' => [
-            'pdf',
-        ],
-    ];
-
-    public function __construct(UploadedFile $file)
+    public function uploadFromUrl(string $url): File
     {
-        $this->file = $file;
-        $this->fileName = $this->generateFileName();
-        $this->catalogs = $this->generateCatalogsByFileName($this->fileName);
-    }
+        $info = pathinfo($url);
+        $extension = $info['extension'];
+        $oldName = $info['filename'];
 
-    /**
-     * Загрузка изображения
-     *
-     * @return bool
-     */
-    public function upload(): bool
-    {
-        if (Storage::disk(static::DISK)->putFileAs($this->getCatalogPath(), $this->file, $this->getFullFileName())) {
-            return $this->uploaded = true;
+        // Замена JPG на JPEG
+        if ($extension === 'jpg') {
+            $extension = 'jpeg';
         }
 
-        return false;
-    }
+        // Получение файла
+        $response = Http::withOptions(['verify' => false])->get($url);
 
-    /**
-     * Получить полное имя файла
-     *
-     * @return string
-     */
-    public function getFullFileName(): string
-    {
-        return $this->fileName . '.' . $this->getExtension();
-    }
-
-    /**
-     * Получить URI строку пути до файла
-     *
-     * @return string
-     */
-    public function getUriPath(): string
-    {
-        return implode('/', $this->catalogs) . '/' . $this->getFullFileName();
-    }
-
-    /**
-     * Получить путь по каталогам до файла
-     *
-     * @return string
-     */
-    public function getCatalogPath(): string
-    {
-        return implode(DIRECTORY_SEPARATOR, $this->catalogs);
-    }
-
-    public function getExtension()
-    {
-        return $this->file->extension();
-    }
-
-    /**
-     * Установка типа
-     *
-     * @return string
-     */
-    public function getType(): string
-    {
-        if (in_array($this->getExtension(), $this->typeExtensions['image'])) {
-            return 'image';
-        } elseif (in_array($this->getExtension(), $this->typeExtensions['document'])) {
-            return 'document';
+        if (!$response->ok()) {
+            throw new ErrorException('File not found from url');
         }
 
-        return 'file';
+        $content = $response->body();
+        $path = $this->generateFilePath($extension);
+
+        if (Storage::disk('media')->put($path, $content)) {
+            return new File($path, $oldName);
+        }
+
+        throw new ErrorException('File not uploaded');
     }
 
+    // ---------------------------------------------------------
+    // System
+    // ---------------------------------------------------------
+
     /**
-     * Сгенерировать название для БД
+     * Сгенерировать название файла для хранения
      *
      * @return string
      */
-    public function getOriginalName(): string
+    private function generateFilePath(string $extension): string
     {
-        return pathinfo($this->file->getClientOriginalName(), PATHINFO_FILENAME);
+        $name = $this->generateName();
+        return implode(DIRECTORY_SEPARATOR, $this->generateCatalogs($name)) . DIRECTORY_SEPARATOR . $name . '.' . $extension;
     }
 
     /**
@@ -148,7 +63,7 @@ class Uploader
      *
      * @return string
      */
-    private function generateFileName(): string
+    private function generateName(): string
     {
         return substr(md5(microtime() . rand(0, 1000)), 0, 15);
     }
@@ -158,12 +73,12 @@ class Uploader
      *
      * @return array
      */
-    private function generateCatalogsByFileName(string $string, int $symbolCount = 2): array
+    private function generateCatalogs(string $fileName, int $symbolCount = 2): array
     {
         return [
             date('Y'),
             date('m'),
-            substr($string, 0, $symbolCount)
+            substr($fileName, 0, $symbolCount)
         ];
     }
 }

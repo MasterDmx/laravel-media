@@ -3,6 +3,8 @@
 namespace MasterDmx\LaravelMedia;
 
 use Illuminate\Support\ServiceProvider;
+use MasterDmx\LaravelMedia\Models\Media;
+use MasterDmx\LaravelMedia\Services\Uploader;
 
 class MediaServiceProvider extends ServiceProvider
 {
@@ -23,7 +25,10 @@ class MediaServiceProvider extends ServiceProvider
         $this->mergeConfigFrom( __DIR__.'/../config/media.php', 'media');
 
         $this->app->singleton(MediaManager::class, function () {
-            return new MediaManager();
+            return new MediaManager(
+                $this->app->make(Uploader::class),
+                $this->app->make(Media::class)
+            );
         });
     }
 }

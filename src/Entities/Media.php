@@ -7,11 +7,11 @@ use MasterDmx\LaravelMedia\MediaHelper;
 abstract class Media
 {
     /**
-     * Идентификатор медиа контента
+     * Ключ файла в рамках коллекции
      *
      * @var string
      */
-    public $id;
+    public $key;
 
     /**
      * Путь
@@ -27,13 +27,16 @@ abstract class Media
      */
     public $type;
 
-    abstract public static function import(array $data);
+    abstract public static function instance(array $data);
 
-    public function __construct(string $id, string $path, string $type)
+    public function __construct(string $path, string $type, string $key = null)
     {
-        $this->id = $id;
         $this->path = $path;
         $this->type = $type;
+
+        if (isset($key)) {
+            $this->key = $key;
+        }
     }
 
     public function getUrl()
@@ -67,7 +70,7 @@ abstract class Media
     public function toArray(): array
     {
         return [
-            'id' => $this->id,
+            'key' => $this->key,
             'path' => $this->path,
         ];
     }
@@ -85,7 +88,7 @@ abstract class Media
      */
     public function show(string $template): string
     {
-        $template = str_replace('{id}', $this->id, $template);
+        $template = str_replace('{key}', $this->key, $template);
         $template = str_replace('{path}', $this->path, $template);
         $template = str_replace('{url}', $this->getUrl(), $template);
 

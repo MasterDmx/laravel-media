@@ -21,20 +21,28 @@ return [
      */
     'user_mode' => false,
 
-    'default_entity' => \MasterDmx\LaravelMedia\Entities\FileMedia::class,
+    /**
+     * Тип по умолчанию
+     */
+    'default_type' => 'file',
 
     /**
-     * Определения типов
+     * Определение типов
+     * Ключ - идентификатор типа
+     * Значение - массив расширений файлов
+     * -- Если расшрение не найдено - будет установлен тип по умолчанию
      */
     'types' => [
-        'image' => [
-            'driver' => 'image',
-            'extensions' => ['png', 'jpeg', 'jpg', 'ico', 'gif', 'svg'],
-            'entity' => \MasterDmx\LaravelMedia\Entities\ImageMedia::class,
-        ],
+        'image' => ['png', 'jpeg', 'jpg', 'ico', 'gif', 'svg'],
+        'document' => ['pdf'],
+    ],
 
-        'document' => [
-            'extensions' => ['png', 'jpeg', 'jpg', 'ico', 'gif', 'svg'],
-        ],
+    /**
+     * Объекты-обработчики
+     * * Ключ - идентификатор типа (default - обработчик по умолчанию)
+     * * Значение - название класса
+     */
+    'handlers' => [
+        'image' => \MasterDmx\LaravelMedia\Entities\Media\Image::class,
     ],
 ];
