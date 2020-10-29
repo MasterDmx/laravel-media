@@ -15,6 +15,13 @@ class File
     private $path;
 
     /**
+     * Локальный URL путь относительно media-директории
+     *
+     * @var string
+     */
+    private $urlPath;
+
+    /**
      * Старое название файла
      *
      * @var string
@@ -28,9 +35,11 @@ class File
      */
     private $file;
 
+
     public function __construct(string $path, string $oldName = null)
     {
-        $this->path = $path;
+        $this->path = str_replace('/', DIRECTORY_SEPARATOR, $path);
+        $this->urlPath = str_replace('\\', '/', $path);
         $this->oldName = $oldName;
     }
 
@@ -41,7 +50,7 @@ class File
      */
     public function getPath(): string
     {
-        return Storage::disk('media')->path($this->path);
+        return Storage::disk(config('media.disk'))->path($this->path);
     }
 
     /**
@@ -49,9 +58,29 @@ class File
      *
      * @return string
      */
-    public function getMediaPath(): string
+    public function getResidualPath(): string
     {
         return $this->path;
+    }
+
+    /**
+     * Получить поленый URL
+     *
+     * @return string URL
+     */
+    public function getUrl()
+    {
+        return Storage::disk(config('media.disk'))->url($this->urlPath);
+    }
+
+    /**
+     * Получить URL в рамках медиа-раздела
+     *
+     * @return string URL
+     */
+    public function getResidualUrl()
+    {
+        return $this->urlPath;
     }
 
     /**
@@ -88,4 +117,13 @@ class File
     {
         return $this->oldName ?? $default;
     }
+
+    public function remove()
+    {
+        return Storage::disk(config('media.disk'))->delete($this->path);
+    }
+
+    // ------------------------------------------------------------
+    //
+    // ------------------------------------------------------------
 }

@@ -3,6 +3,7 @@
 namespace MasterDmx\LaravelMedia\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use MasterDmx\LaravelMedia\Entities\File;
 
 class Media extends Model
 {
@@ -30,6 +31,27 @@ class Media extends Model
         ]);
     }
 
+    /**
+     * Получить физический файл
+     *
+     * @return \MasterDmx\LaravelMedia\Entities\File
+     */
+    public function getFile(): File
+    {
+        return new File($this->path, $this->name ?? null);
+    }
+
+    /**
+     * Установить аттрибут URL в объект модели
+     *
+     * @return self
+     */
+    public function defineUrl(): self
+    {
+        $this->url = $this->getFile()->getUrl();
+        return $this;
+    }
+
     // --------------------------------------------------------------------
     // Scopes
     // --------------------------------------------------------------------
@@ -37,5 +59,11 @@ class Media extends Model
     public function scopeImportedTo($q, string $to)
     {
         return $q->where('imported_to', $to);
+    }
+
+    public function delete()
+    {
+        $this->getFile()->remove();
+        return parent::delete();
     }
 }

@@ -3,19 +3,24 @@
 namespace MasterDmx\LaravelMedia;
 
 use ErrorException;
+use Illuminate\Filesystem\FilesystemAdapter;
 use MasterDmx\LaravelMedia\Entities\MediaCollection;
 use MasterDmx\LaravelMedia\Services\Uploader;
-use Illuminate\Support\Facades\Http;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
 use MasterDmx\LaravelMedia\Models\Media;
-use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class MediaManager
 {
+    /**
+     * Тип по умолчанию
+     */
     const DEFAULT_TYPE = 'file';
-    const DEFAULT_HANDLER = 'file';
 
-    private $typeEntities = [];
+    /**
+     * Обработчик по умолчанию
+     */
+    const DEFAULT_HANDLER = MasterDmx\LaravelMedia\Entities\Media\File::class;
 
     /**
      * Загрузчик
@@ -35,12 +40,6 @@ class MediaManager
     {
         $this->uploader = $uploader;
         $this->model = $model;
-
-        $this->typeEntities['file'] = config('media.default_entity');
-
-        foreach (config('media.types', []) as $key => $data) {
-            $this->typeEntities[$key] = $data['entity'] ?? config('media.default_entity');
-        }
     }
 
     /**
@@ -49,23 +48,17 @@ class MediaManager
      * @param array $data
      * @return MediaCollection
      */
-    public function import(array $data): MediaCollection
+    public function createCollection(array $data): MediaCollection
     {
-        $list = [];
-
-        foreach ($data as $key => $value) {
-            if (is_string($value)) {
-                $value = ['path' => $value];
+        foreach ($data as $key => $content) {
+            if (is_string($content)) {
+                $content = ['path' => $content];
             }
 
-            $type = !empty($value['type']) ? $value['type'] : 'file';
-            $list[$key] = $this->typeEntities[$type]::import($value + [
-                'id' => $key,
-                'type' => $type
-            ]);
+            $list[$key] = $this->createInstance($content['path'], (!empty($content['type']) ? $content['type'] : static::DEFAULT_TYPE), $key, $content);
         }
 
-        return new MediaCollection($list);
+        return new MediaCollection($list ?? []);
     }
 
     /**
@@ -89,7 +82,30 @@ class MediaManager
     /**
      * Загрузить файл по внешней ссылке
      */
-    public function addFromUrl(string $url, string $name = null, bool $disableDuplicates = true)
+    public function addFile(UploadedFile $uploadedFile)
+    {
+        // Загрузить файл
+        $file = $this->uploader->upload($uploadedFile);
+
+        // Запись в модели
+        $model = $this->model->add(
+            $file->getResidualUrl(),
+            $this->getType($file->getExtension()),
+            $name ?? $file->getOldName(),
+            null
+        );
+
+        if ($model->id > 0) {
+            return $model;
+        }
+
+        throw new ErrorException('Model error');
+    }
+
+    /**
+     * Загрузить файл по внешней ссылке
+     */
+    public function addFileFromUrl(string $url, string $name = null, bool $disableDuplicates = true)
     {
         // Проверяем существование ранее импортированного файла
         if ($disableDuplicates && $model = $this->model->importedTo($url)->first()) {
@@ -101,7 +117,7 @@ class MediaManager
 
         // Запись в модели
         $model = $this->model->add(
-            $file->getMediaPath(),
+            $file->getResidualUrl(),
             $this->getType($file->getExtension()),
             $name ?? $file->getOldName(),
             null,
@@ -113,6 +129,26 @@ class MediaManager
         }
 
         throw new ErrorException('Model error');
+    }
+
+    /**
+     * Получить модель
+     *
+     * @return \MasterDmx\LaravelMedia\Models\Media
+     */
+    public function getModel(): Media
+    {
+        return $this->model;
+    }
+
+    /**
+     * Получить хранилище
+     *
+     * @return \Illuminate\Filesystem\FilesystemAdapter
+     */
+    public function getStorage(): FilesystemAdapter
+    {
+        return Storage::disk(config('media.disk'));
     }
 
     /**

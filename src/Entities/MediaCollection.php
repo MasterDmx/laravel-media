@@ -8,10 +8,6 @@ class MediaCollection extends Collection
 {
     public function toArray(): array
     {
-        // return $this->map(function ($elem) {
-        //     return $elem->toArray();
-        // })->all();
-
         return $this->export();
     }
 
@@ -48,13 +44,10 @@ class MediaCollection extends Collection
      * @param [type] $key
      * @param [type] $template
      * @param [type] $default
-     * @return void
+     * @return string
      */
-    public function show($key, $template, $default = '')
+    public function show($key, $template = null, $default = '')
     {
         return $this->has($key) ? $this->items[$key]->show($template) : value($default);
     }
-
-
-
 }

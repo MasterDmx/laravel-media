@@ -35,7 +35,7 @@ class MediaCast implements CastsAttributes
      */
     public function get($model, $key, $value, $attributes)
     {
-        return $this->manager->import(json_decode($value, true), get_class($model));
+        return $this->manager->createCollection(json_decode($value, true), get_class($model));
     }
 
     /**
@@ -54,7 +54,7 @@ class MediaCast implements CastsAttributes
         }
 
         if (is_array($value)) {
-            return json_encode($this->manager->import($value)->export());
+            return json_encode($this->manager->createCollection($value)->export());
         }
 
         throw new ErrorException('Undefined value type');

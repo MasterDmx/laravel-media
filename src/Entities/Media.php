@@ -27,12 +27,20 @@ abstract class Media
      */
     public $type;
 
+    /**
+     * Файл
+     *
+     * @var \MasterDmx\LaravelMedia\Entities\File
+     */
+    public $file;
+
     abstract public static function instance(array $data);
 
     public function __construct(string $path, string $type, string $key = null)
     {
         $this->path = $path;
         $this->type = $type;
+        $this->file = new File($path);
 
         if (isset($key)) {
             $this->key = $key;
@@ -41,7 +49,7 @@ abstract class Media
 
     public function getUrl()
     {
-        return MediaHelper::getUrl($this->path);
+        return $this->file->getUrl();
     }
 
     /**
@@ -86,8 +94,12 @@ abstract class Media
      * @param string $template
      * @return string
      */
-    public function show(string $template): string
+    public function show(string $template = null): string
     {
+        if (!isset($template)) {
+            return '';
+        }
+
         $template = str_replace('{key}', $this->key, $template);
         $template = str_replace('{path}', $this->path, $template);
         $template = str_replace('{url}', $this->getUrl(), $template);

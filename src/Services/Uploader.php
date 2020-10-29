@@ -3,13 +3,32 @@
 namespace MasterDmx\LaravelMedia\Services;
 
 use ErrorException;
-use Illuminate\Contracts\Filesystem\Filesystem;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 use MasterDmx\LaravelMedia\Entities\File;
 
 class Uploader
 {
+    /**
+     * Загрузка
+     *
+     * @param \Illuminate\Http\UploadedFile $file
+     */
+    public function upload(UploadedFile $file): File
+    {
+        $oldName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        $name = $this->generateName();
+        $catalogs = $this->generateCatalogsPath($name);
+        $path = $catalogs . DIRECTORY_SEPARATOR . $name . '.' . $file->extension();
+
+        if (Storage::disk('media')->putFileAs($catalogs, $file, $name . '.' . $file->extension())) {
+            return new File($path, $oldName);
+        }
+
+        throw new ErrorException('File not uploaded');
+    }
+
     /**
      * Загрузка из урла
      *
@@ -34,7 +53,8 @@ class Uploader
         }
 
         $content = $response->body();
-        $path = $this->generateFilePath($extension);
+        $name = $this->generateName();
+        $path = $this->generateCatalogsPath($name) . DIRECTORY_SEPARATOR . $name . '.' . $extension;
 
         if (Storage::disk('media')->put($path, $content)) {
             return new File($path, $oldName);
@@ -44,19 +64,8 @@ class Uploader
     }
 
     // ---------------------------------------------------------
-    // System
+    // Helpers
     // ---------------------------------------------------------
-
-    /**
-     * Сгенерировать название файла для хранения
-     *
-     * @return string
-     */
-    private function generateFilePath(string $extension): string
-    {
-        $name = $this->generateName();
-        return implode(DIRECTORY_SEPARATOR, $this->generateCatalogs($name)) . DIRECTORY_SEPARATOR . $name . '.' . $extension;
-    }
 
     /**
      * Сгенерировать название файла для хранения
@@ -73,12 +82,12 @@ class Uploader
      *
      * @return array
      */
-    private function generateCatalogs(string $fileName, int $symbolCount = 2): array
+    private function generateCatalogsPath(string $fileName, int $symbolCount = 2): string
     {
-        return [
+        return implode(DIRECTORY_SEPARATOR, [
             date('Y'),
             date('m'),
             substr($fileName, 0, $symbolCount)
-        ];
+        ]);
     }
 }

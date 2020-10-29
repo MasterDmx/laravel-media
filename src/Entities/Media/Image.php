@@ -39,9 +39,9 @@ class Image extends Media
      * @param string $template
      * @return string
      */
-    public function show(string $template): string
+    public function show(string $template = null): string
     {
-        $template = parent::show($template);
+        $template = parent::show($template ?? config('default_image_show_template', '<img src="{url}" alt="{title}">'));
         $template = str_replace('{title}', $this->title, $template);
 
         return $template;
