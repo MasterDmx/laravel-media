@@ -2,7 +2,7 @@
 
 namespace MasterDmx\LaravelMedia\Entities;
 
-class UndefinedMedia
+class Undefined
 {
 
 }

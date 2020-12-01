@@ -16,7 +16,7 @@ class MediaCollection extends Collection
         $result = [];
 
         foreach ($this->items ?? [] as $key => $item) {
-            $result[$item->id] = $item->export();
+            $result[$item->key] = $item->export();
         }
 
         return $result;
