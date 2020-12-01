@@ -36,8 +36,16 @@ class MediaManager
      */
     private $model;
 
+    /**
+     * Классы обработчики
+     *
+     * @var array
+     */
+    private $handlers;
+
     public function __construct(Uploader $uploader, Media $model)
     {
+        $this->handlers = config('media.handlers', []);
         $this->uploader = $uploader;
         $this->model = $model;
     }
@@ -152,6 +160,34 @@ class MediaManager
     }
 
     /**
+     * Установить обработчик из вне
+     *
+     * @param string $type - Тип
+     * @param string $class - Класс обработчик
+     * @return self
+     */
+    public function defineHandler(string $type, string $class): self
+    {
+        $this->handlers[$type] = $class;
+        return $this;
+    }
+
+    /**
+     * Установить несколько обработчиков из вне
+     *
+     * @param array $handlers
+     * @return self
+     */
+    public function defineHandlers(array $handlers): self
+    {
+        foreach ($handlers as $type => $class) {
+            $this->defineHandler($type, $class);
+        }
+
+        return $this;
+    }
+
+    /**
      * Получить тип по расширению
      *
      * @param string $extension
@@ -176,11 +212,6 @@ class MediaManager
      */
     private function getHandler(string $type): string
     {
-        if ($handler = config('media.handlers.' . $type, null)) {
-            return $handler;
-        }
-
-        return config('media.handlers.default', static::DEFAULT_HANDLER);
+        return $this->handlers[$type] ?? config('media.handlers.default', static::DEFAULT_HANDLER);
     }
-
 }
