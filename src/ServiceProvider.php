@@ -2,11 +2,11 @@
 
 namespace MasterDmx\LaravelMedia;
 
-use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\ServiceProvider as LeraverServiceProvider;
 use MasterDmx\LaravelMedia\Models\Media;
 use MasterDmx\LaravelMedia\Services\Uploader;
 
-class MediaServiceProvider extends ServiceProvider
+class ServiceProvider extends LeraverServiceProvider
 {
     public function boot()
     {
@@ -16,6 +16,9 @@ class MediaServiceProvider extends ServiceProvider
     public function register()
     {
         $this->mergeConfigFrom( __DIR__.'/../config/media.php', 'media');
+
+        // Добавляем диск
+        config(['filesystems.disks.' . config('media.disk', 'media') => config('media.disk_settings')]);
 
         $this->app->singleton(MediaManager::class, function () {
             return new MediaManager(

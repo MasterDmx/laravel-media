@@ -7,6 +7,16 @@ return [
     'disk' => 'media',
 
     /**
+     * Диск
+     */
+    'disk_settings' => [
+        'driver' => 'local',
+        'root' => storage_path('app/public/media'),
+        'url' => env('APP_URL').'/storage/media',
+        'visibility' => 'public',
+    ],
+
+    /**
      * Разрешить использование пользователей
      */
     'user_mode' => false,
