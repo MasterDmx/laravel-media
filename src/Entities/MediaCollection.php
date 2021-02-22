@@ -46,8 +46,8 @@ class MediaCollection extends Collection
      * @param [type] $default
      * @return string
      */
-    public function show($key, $template = null, $default = '')
+    public function show($key, $template = null, $default = null)
     {
-        return $this->has($key) ? $this->items[$key]->show($template) : value($default);
+        return $this->has($key) ? $this->get($key)->show($template) : $default;
     }
 }

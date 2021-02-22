@@ -2,11 +2,11 @@
 
 namespace MasterDmx\LaravelMedia;
 
-use Illuminate\Support\ServiceProvider as LeraverServiceProvider;
+use Illuminate\Support\ServiceProvider;
 use MasterDmx\LaravelMedia\Models\Media;
 use MasterDmx\LaravelMedia\Services\Uploader;
 
-class ServiceProvider extends LeraverServiceProvider
+class MediaServiceProvider extends ServiceProvider
 {
     public function boot()
     {
