@@ -1,0 +1,23 @@
+{
+    "name": "masterdmx/laravel-media",
+    "description": "Media storage",
+    "type": "library",
+    "license": "MIT",
+    "minimum-stability": "stable",
+    "authors": [
+        {
+            "name": "Sergey Krening",
+            "email": "masterdmx3325@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "MasterDmx\\LaravelMedia\\": "src/"
+        }
+    },
+    "version": "1.0.0",
+    "require": {
+        "intervention/image": "^2.5",
+        "nesbot/carbon": "^2.46.0"
+    }
+}
