@@ -3,6 +3,7 @@
 namespace MasterDmx\LaravelMedia;
 
 use MasterDmx\LaravelMedia\Exceptions\IncorrectIdException;
+use phpDocumentor\Reflection\Types\This;
 
 class Id
 {
@@ -51,7 +52,7 @@ class Id
      */
     public static function generate(string $extension): self
     {
-        return new Id(date('Y'), date('m'), substr(md5(microtime() . rand(0, 1000)), 0, 15), $extension);
+        return new Id(date('Y'), date('m'), substr(md5(microtime() . rand(0, 1000)), 0, 15) . rand(0, 9) . date('is'), $extension);
     }
 
     /**
@@ -118,6 +119,4 @@ class Id
     {
         return $this->hash;
     }
-
-
 }
