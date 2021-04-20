@@ -9,9 +9,7 @@ class MediaServiceProvider extends ServiceProvider
 {
     public function boot()
     {
-        $this->publishes([
-            __DIR__.'/../config/media.php' => config_path('media.php')
-        ]);
+        $this->publishes([__DIR__.'/../config/media.php' => config_path('media.php')], 'config');
     }
 
     public function register()

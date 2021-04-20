@@ -36,6 +36,15 @@ final class ImageUploader
      */
     public function upload($data, Context $context, string $name, string $title = ''): Image
     {
+        if (is_string($data)) {
+            $data = file_get_contents($data, false, stream_context_create([
+                'ssl' => [
+                    'verify_peer' => false,
+                    'verify_peer_name' => false,
+                ]
+            ]));
+        }
+
         // Получаем объект Image из пакета Intervention
         $image = $this->imageManager->make($data);
 

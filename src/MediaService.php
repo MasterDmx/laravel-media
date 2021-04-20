@@ -40,12 +40,11 @@ class MediaService
         $id = Id::parse($id);
         $storage = MediaStorage::init($id);
 
-        if (!$storage->hasFile()) {
+        if (!$storage->hasDefaultFile()) {
             throw new MediaNotFoundException('Media by alias ' . $id->toString() . ' not found');
         }
 
-        $meta = ImageMeta::fromArray(MetaStorage::init($storage)->all());
-
+        $meta       = ImageMeta::fromArray(MetaStorage::init($storage)->all());
         $variations = ImageVariator::init($storage)->getAll();
 
         return new Image($id, $storage, $meta, $variations, $personalTitle);

@@ -15,7 +15,7 @@
             "MasterDmx\\LaravelMedia\\": "src/"
         }
     },
-    "version": "1.0.1",
+    "version": "1.0.2",
     "require": {
         "intervention/image": "^2.5",
         "nesbot/carbon": "^2.46.0"

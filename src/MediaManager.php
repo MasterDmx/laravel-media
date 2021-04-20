@@ -86,7 +86,7 @@ class MediaManager
      */
     public function has(string $id): bool
     {
-        return MediaStorage::init(Id::parse($id))->hasFile();
+        return MediaStorage::init(Id::parse($id))->hasDefaultFile();
     }
 
     /**

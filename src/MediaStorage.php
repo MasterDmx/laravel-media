@@ -203,7 +203,7 @@ class MediaStorage
      *
      * @return bool
      */
-    public function hasFile(): bool
+    public function hasDefaultFile(): bool
     {
         return file_exists($this->getPathToFile());
     }
@@ -327,12 +327,14 @@ class MediaStorage
     {
         $files = [];
 
-        foreach (scandir($this->getPathTo($path)) as $item) {
-            if ($item === '.' || $item === '..') {
-                continue;
-            }
+        if ($this->has($path)) {
+            foreach (scandir($this->getPathTo($path)) as $item) {
+                if ($item === '.' || $item === '..') {
+                    continue;
+                }
 
-            $files[] = $item;
+                $files[] = $item;
+            }
         }
 
         return $files;
