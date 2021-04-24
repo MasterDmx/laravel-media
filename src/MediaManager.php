@@ -2,6 +2,7 @@
 
 namespace MasterDmx\LaravelMedia;
 
+use Illuminate\Support\Str;
 use MasterDmx\LaravelMedia\Contexts\ContextRegistry;
 use MasterDmx\LaravelMedia\Events\MediaUploaded;
 use MasterDmx\LaravelMedia\Images\ImageUploader;
@@ -125,5 +126,10 @@ class MediaManager
     public function updateMeta(string $id, string $name, string $title): bool
     {
         return $this->service->updateMedia($id, $name, $title);
+    }
+
+    public function parsUrl(string $url)
+    {
+        return Str::before(substr(Str::after($url, 'storage/media/'), 10), '/');
     }
 }
